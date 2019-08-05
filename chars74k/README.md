@@ -1,1 +1,1 @@
-Dataset can be extracted from resources/EnglishImg.zip 
+Dataset can be extracted from EnglishImg.zip 
