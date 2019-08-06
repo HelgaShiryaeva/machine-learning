@@ -10,6 +10,7 @@ CONST_VAL = 'Val'
 CONST_TEST = 'Test'
 CONST_ALL = 'All'
 
+
 def load_data(folder_path, imsize):
     data = []
     for class_folder in tqdm(os.listdir(folder_path)):
