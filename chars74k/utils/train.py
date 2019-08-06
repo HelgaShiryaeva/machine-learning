@@ -9,7 +9,7 @@ def save_model(model, json_filename, weights_filename):
     print("Saved model to disk")
 
 
-def load_model_from_json(json_filename, weights_filename):
+def load_model(json_filename, weights_filename):
     json_file = open(json_filename, 'r')
     loaded_model_json = json_file.read()
     json_file.close()
