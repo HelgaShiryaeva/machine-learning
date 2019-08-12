@@ -11,7 +11,7 @@ CONST_TEST = 'Test'
 CONST_ALL = 'All'
 
 
-def load_data(folder_path, imsize):
+def load_data(folder_path, im_size):
     data = []
     for class_folder in tqdm(os.listdir(folder_path)):
         class_folder_path = os.path.join(folder_path, class_folder)
@@ -19,7 +19,7 @@ def load_data(folder_path, imsize):
         for img in os.listdir(class_folder_path):
             image_path = os.path.join(class_folder_path, img)
             img = cv2.imread(image_path, cv2.IMREAD_COLOR)
-            img = cv2.resize(img, (imsize, imsize))
+            img = cv2.resize(img, (im_size, im_size))
             data.append([img, label])
     return data
 
@@ -55,7 +55,7 @@ def preprocess_images(folder_path):
 
     for type_folder in type_folders:
         if os.path.isdir(os.path.join(folder_path, type_folder)):
-            print ('Can not process.\n' + '"' + type_folder + '" already exist.')
+            print('Can not process.\n' + '"' + type_folder + '" already exist.')
             return
 
         for class_folder in class_folders:
@@ -65,9 +65,9 @@ def preprocess_images(folder_path):
         imgs = os.listdir(os.path.join(folder_path, CONST_ALL, class_folder))
         shuffle(imgs)
 
-        train_imgs = imgs[0 : int(len(imgs) * 0.7)]
-        val_imgs = imgs[int(len(imgs) * 0.7) : int(len(imgs) * 0.8)]
-        test_imgs = imgs[int(len(imgs) * 0.8) : len(imgs)]
+        train_imgs = imgs[0: int(len(imgs) * 0.7)]
+        val_imgs = imgs[int(len(imgs) * 0.7): int(len(imgs) * 0.8)]
+        test_imgs = imgs[int(len(imgs) * 0.8): len(imgs)]
 
         src_path = os.path.join(folder_path, CONST_ALL, class_folder)
 
