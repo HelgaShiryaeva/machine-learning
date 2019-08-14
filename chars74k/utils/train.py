@@ -1,4 +1,5 @@
 from keras.models import model_from_json
+import matplotlib.pyplot as plt
 
 
 def save_model(model, json_filename, weights_filename):
@@ -18,3 +19,21 @@ def load_model(json_filename, weights_filename):
     print("Loaded model from disk")
 
     return model
+
+
+def plot_training(history):
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    epochs = range(len(acc))
+
+    plt.plot(epochs, acc, 'r.')
+    plt.plot(epochs, val_acc, 'r')
+    plt.title('Training and validation accuracy')
+
+    plt.figure()
+    plt.plot(epochs, loss, 'r.')
+    plt.plot(epochs, val_loss, 'r-')
+    plt.title('Training and validation loss')
+    plt.show()

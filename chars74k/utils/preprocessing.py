@@ -4,6 +4,8 @@ import os
 import cv2
 import matplotlib.pyplot as plt
 from random import shuffle
+from keras.preprocessing.image import ImageDataGenerator
+
 
 CONST_TRAIN = 'Train'
 CONST_VAL = 'Val'
@@ -24,24 +26,6 @@ def load_data(folder_path, im_size):
     return data
 
 
-def plot_random_samples(labeled_images, row_size, col_size):
-    fig = plt.figure()
-
-    images_copy = list(labeled_images)
-    shuffle(images_copy)
-    images_copy = images_copy[: row_size * col_size]
-
-    for num, data in enumerate(images_copy):
-        img_data = data[0]
-        label = data[1]
-        y = fig.add_subplot(row_size, col_size, num + 1)
-        y.imshow(cv2.cvtColor(img_data, cv2.COLOR_BGR2RGB))
-        plt.title(label)
-        y.get_xaxis().set_visible(False)
-        y.get_yaxis().set_visible(False)
-    plt.show()
-
-
 def copy_imgs(src, dst, img_names):
     for img_name in img_names:
         src_path = os.path.join(src, img_name)
@@ -49,7 +33,7 @@ def copy_imgs(src, dst, img_names):
         copyfile(src_path, dst_path)
 
 
-def preprocess_images(folder_path):
+def split_images_for_train(folder_path):
     class_folders = os.listdir(os.path.join(folder_path, CONST_ALL))
     type_folders = [CONST_TEST, CONST_TRAIN, CONST_VAL]
 
@@ -74,3 +58,41 @@ def preprocess_images(folder_path):
         copy_imgs(src_path, os.path.join(folder_path, CONST_TRAIN, class_folder), train_imgs)
         copy_imgs(src_path, os.path.join(folder_path, CONST_VAL, class_folder), val_imgs)
         copy_imgs(src_path, os.path.join(folder_path, CONST_TEST, class_folder), test_imgs)
+
+
+def get_data_generator(path, preprocess_input, img_height, img_width, batch_size):
+    data_generator = ImageDataGenerator(
+            preprocessing_function=preprocess_input,
+            rotation_range=40,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+            fill_mode='nearest')
+
+    generator = data_generator.flow_from_directory(
+            path,
+            target_size=(img_height, img_width),
+            batch_size=batch_size,
+            class_mode='categorical')
+
+    return generator
+
+
+def plot_random_samples(labeled_images, row_size, col_size):
+    fig = plt.figure()
+
+    images_copy = list(labeled_images)
+    shuffle(images_copy)
+    images_copy = images_copy[: row_size * col_size]
+
+    for num, data in enumerate(images_copy):
+        img_data = data[0]
+        label = data[1]
+        y = fig.add_subplot(row_size, col_size, num + 1)
+        y.imshow(cv2.cvtColor(img_data, cv2.COLOR_BGR2RGB))
+        plt.title(label)
+        y.get_xaxis().set_visible(False)
+        y.get_yaxis().set_visible(False)
+    plt.show()

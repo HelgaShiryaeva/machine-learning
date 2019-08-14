@@ -1,25 +1,28 @@
 from keras.models import Model
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout
-from keras.applications.inception_v3 import InceptionV3
+from keras.applications.mobilenet_v2 import MobileNetV2
+import matplotlib.pyplot as plt
 
 
-class InceptionV3TL:
+class MobileNetV2C74k:
+
     CLASSES = 62
-
     EPOCHS = 5
     STEPS_PER_EPOCH = 320
     VALIDATION_STEPS = 64
 
-    MODEL_FILE = 'inception_chars74k.model'
-
+    MODEL_FILE = 'mobilenet_chars74k.model'
 
     def __init__(self):
-        base_model = InceptionV3(weights='imagenet', include_top=False)
+        base_model = MobileNetV2(weights='imagenet', include_top=False)
 
         x = base_model.output
         x = GlobalAveragePooling2D(name='avg_pool')(x)
-        x = Dropout(0.4)(x)
+        x = Dropout(0.2)(x)
+        x = Dense(1024,activation='relu')(x)
+        x = Dense(512,activation='relu')(x)
         predictions = Dense(self.CLASSES, activation='softmax')(x)
+        
         model = Model(inputs=base_model.input, outputs=predictions)
 
         for layer in base_model.layers:
