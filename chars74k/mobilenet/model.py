@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class MobileNetV2C74k:
 
     CLASSES = 62
-    EPOCHS = 5
+    EPOCHS = 15
     STEPS_PER_EPOCH = 320
     VALIDATION_STEPS = 64
 
@@ -18,15 +18,12 @@ class MobileNetV2C74k:
 
         x = base_model.output
         x = GlobalAveragePooling2D(name='avg_pool')(x)
-        x = Dropout(0.2)(x)
+        x = Dropout(0.3)(x)
         x = Dense(1024,activation='relu')(x)
         x = Dense(512,activation='relu')(x)
         predictions = Dense(self.CLASSES, activation='softmax')(x)
         
         model = Model(inputs=base_model.input, outputs=predictions)
-
-        for layer in base_model.layers:
-            layer.trainable = False
 
         model.compile(optimizer='Adam',
                       loss='categorical_crossentropy',

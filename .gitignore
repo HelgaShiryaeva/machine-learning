@@ -3,5 +3,9 @@
 # Data set
 EnglishImg/
 
+# __pycache__
 *.pyo
 *.pyc
+
+# test file
+test.py
