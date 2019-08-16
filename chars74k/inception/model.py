@@ -4,7 +4,7 @@ from keras.applications.inception_v3 import InceptionV3
 
 
 class InceptionV3TL:
-    CLASSES = 62
+    CLASSES = 36
 
     EPOCHS = 5
     STEPS_PER_EPOCH = 320

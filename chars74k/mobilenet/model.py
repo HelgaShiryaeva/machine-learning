@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 class MobileNetV2C74k:
 
-    CLASSES = 62
-    EPOCHS = 15
+    CLASSES = 36
+    EPOCHS = 1
     STEPS_PER_EPOCH = 320
     VALIDATION_STEPS = 64
 

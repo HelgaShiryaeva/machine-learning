@@ -9,7 +9,6 @@ from keras.preprocessing.image import ImageDataGenerator
 
 CONST_TRAIN = 'Train'
 CONST_VAL = 'Val'
-CONST_TEST = 'Test'
 CONST_ALL = 'All'
 
 
@@ -35,7 +34,7 @@ def copy_imgs(src, dst, img_names):
 
 def split_images_for_train(folder_path):
     class_folders = os.listdir(os.path.join(folder_path, CONST_ALL))
-    type_folders = [CONST_TEST, CONST_TRAIN, CONST_VAL]
+    type_folders = [CONST_TRAIN, CONST_VAL]
 
     for type_folder in type_folders:
         if os.path.isdir(os.path.join(folder_path, type_folder)):
@@ -49,26 +48,25 @@ def split_images_for_train(folder_path):
         imgs = os.listdir(os.path.join(folder_path, CONST_ALL, class_folder))
         shuffle(imgs)
 
-        train_imgs = imgs[0: int(len(imgs) * 0.7)]
-        val_imgs = imgs[int(len(imgs) * 0.7): int(len(imgs) * 0.8)]
-        test_imgs = imgs[int(len(imgs) * 0.8): len(imgs)]
+        train_imgs = imgs[0: int(len(imgs) * 0.8)]
+        val_imgs = imgs[int(len(imgs) * 0.8): len(imgs)]
 
         src_path = os.path.join(folder_path, CONST_ALL, class_folder)
 
         copy_imgs(src_path, os.path.join(folder_path, CONST_TRAIN, class_folder), train_imgs)
         copy_imgs(src_path, os.path.join(folder_path, CONST_VAL, class_folder), val_imgs)
-        copy_imgs(src_path, os.path.join(folder_path, CONST_TEST, class_folder), test_imgs)
 
 
 def get_data_generator(path, preprocess_input, img_height, img_width, batch_size):
     data_generator = ImageDataGenerator(
             preprocessing_function=preprocess_input,
-            rotation_range=40,
+            rotation_range=30,
             width_shift_range=0.2,
             height_shift_range=0.2,
             shear_range=0.2,
             zoom_range=0.2,
-            horizontal_flip=True,
+            horizontal_flip=False,
+            vertical_flip=False,
             fill_mode='nearest')
 
     generator = data_generator.flow_from_directory(
