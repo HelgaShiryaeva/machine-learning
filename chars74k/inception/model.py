@@ -12,13 +12,14 @@ class InceptionV3TL:
 
     MODEL_FILE = 'inception_chars74k.model'
 
-
     def __init__(self):
         base_model = InceptionV3(weights='imagenet', include_top=False)
 
         x = base_model.output
         x = GlobalAveragePooling2D(name='avg_pool')(x)
         x = Dropout(0.4)(x)
+        x = Dense(1024, activation='relu')(x)
+        x = Dense(128, activation='relu')(x)
         predictions = Dense(self.CLASSES, activation='softmax')(x)
         model = Model(inputs=base_model.input, outputs=predictions)
 
